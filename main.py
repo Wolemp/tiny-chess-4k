@@ -4,10 +4,10 @@ def post(p,o):
  return json.load(R.urlopen(R.Request(os.environ['MAKEFUN_ENV_URL']+p,json.dumps(o).encode(),{'content-type':'application/json'})))
 g=post('/game',{})
 while g['status']!='done':
- if g['status']!='your_move':g=post('/game',{});continue
+ if g['status']!='your_move':g=post('/game',{});continue  # next game starts when asked
  L=g['legal_moves']
  try:m=pick(g['moves'],L)
- except Exception:m=L[0]
- if m not in L:m=L[0]
+ except Exception:m=sorted(L)[0]
+ if m not in L:m=sorted(L)[0]
  try:g=post('/move',{'game':g['game'],'move':m})
- except Exception:g=post('/move',{'game':g['game'],'move':sorted(L)[0]})
+ except Exception:g=post('/move',{'game':g['game'],'move':min(L)})
