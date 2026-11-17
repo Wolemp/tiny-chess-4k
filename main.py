@@ -7,6 +7,7 @@ while g['status']!='done':
  if g['status']!='your_move':g=post('/game',{});continue
  L=g['legal_moves']
  try:m=pick(g['moves'],L)
- except Exception:m=sorted(L)[0]
- if m not in L:m=sorted(L)[0]
- g=post('/move',{'game':g['game'],'move':m})
+ except Exception:m=L[0]
+ if m not in L:m=L[0]
+ try:g=post('/move',{'game':g['game'],'move':m})
+ except Exception:g=post('/move',{'game':g['game'],'move':sorted(L)[0]})
